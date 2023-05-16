@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Complete JavaScript Course</title>
+  </head>
+
+  <body>
+    <input type="text" id="item" />
+    <br />
+    <input type="button" onClick="addItem()" value="Add Item" />
+    <br />
+    <div id="output"></div>
+    <script>
+      let shoppingList = [];
+
+      function addItem() {
+        function outputList() {
+          let html = "";
+          let output = document.getElementById("output");
+          for (let x = 0; x < shoppingList.length; x++) {
+            html += x + 1 + ". " + shoppingList[x] + "<br>";
+          }
+          output.innerHTML = html;
+        }
+
+        let addItem = document.getElementById("item").value;
+        shoppingList.push(addItem);
+        outputList();
+      }
+
+      let item = document.getElementById("item");
+      item.addEventListener("keypress", (e) => {
+        if (e.key == "Enter") addItem();
+      });
+    </script>
+  </body>
+</html>
