@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <title>Complete JavaScript Course</title>
+    <style>
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+
+      td:first-child {
+        width: 300px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <input type="text" id="addFriend" />
+      <input type="button" id="addNew" value="Add Friend" />
+    </div>
+    <div class="output"></div>
+    <script>
+      function getFriendsTable() {
+        let table = "";
+
+        friends.forEach((friend, idx) => {
+          table +=
+            `<tr id="id${idx}" data-row="${idx}">` +
+            `<td>${friend}</td>` +
+            '<td><a href="#" data-action="delete">Del</a></td>' +
+            '<td><a href="#" data-action="edit">Edit</a></td></tr>';
+        });
+
+        return `<h1>Friend's Table</h1><table>${table}</table>`;
+      }
+
+      function addDeleteEvent() {
+        document
+          .querySelectorAll('[data-action="delete"]')
+          .forEach((deleteLink) => {
+            deleteLink.addEventListener("click", (event) => {
+              let idx = deleteLink
+                .closest("[data-row]")
+                .getAttribute("data-row");
+
+              event.preventDefault();
+              friends.splice(idx, 1);
+              buildFriendView();
+            });
+          });
+      }
+
+      function addEditEvent() {
+        document
+          .querySelectorAll('[data-action="edit"]')
+          .forEach((editLink) => {
+            editLink.addEventListener("click", (event) => {
+              event.preventDefault();
+              let row = this.closest("[data-row]");
+              let rid = row.getAttribute("data-row");
+              row.style.backgroundColor = "Yellow";
+              let td = row.firstElementChild;
+              let input = document.createElement("input");
+              input.type = "text";
+              input.value = td.innerText;
+              td.innerHTML = "";
+              td.appendChild(input);
+              input.focus();
+              input.onblur = function () {
+                td.removeChild(input);
+                td.innerHTML = input.value;
+                friends[rid] = input.value;
+                row.style.backgroundColor = "White";
+              };
+            });
+          });
+      }
+
+      function addFriend() {
+        let friendNameElement = document.getElementById("addFriend");
+
+        friends.push(friendNameElement.value);
+        friendNameElement.value = "";
+        buildFriendView();
+      }
+
+      function buildFriendView() {
+        let html;
+
+        html = getFriendsTable();
+        document.querySelector(".output").innerHTML = html;
+        addDeleteEvent();
+        addDeleteEvent();
+      }
+
+      let friends = ["Shivank", "Sid", "Anmol"];
+
+      window.onload = buildFriendView;
+      document
+        .getElementById("addNew")
+        .addEventListener("click", addFriend, false);
+      document.getElementById("addFriend").addEventListener("keypress", (e) => {
+        if (e.key == "Enter") addFriend();
+      });
+    </script>
+  </body>
+</html>
